@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 import Logo from '../../assets/gamaacademy-logo.svg';
 
@@ -16,7 +17,7 @@ const ForgotPassword: React.FC = () => {
           <input type="text" placeholder="Confirme seu CPF" />
           <input type="text" placeholder="Digite sua nova senha" />
           <input type="text" placeholder="Confirme sua nova senha" />
-          <button>Enviar</button>
+          <Link to="/signin">Enviar</Link>
         </Form>
       </Content>
     </Container>

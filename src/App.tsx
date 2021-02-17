@@ -2,16 +2,13 @@ import React from 'react';
 
 import GlobalStyle from './style/global';
 
-import Home from './pages/Home';
-import SignIn from './pages/SignIn';
-import ForgotPassword from './pages/ForgotPassword';
-import Dashboard from './pages/Dashboard';
+import Routes from './routes';
 
 function App() {
   return (
     <>
       <GlobalStyle />
-      <Home />
+      <Routes />
     </>
   );
 }

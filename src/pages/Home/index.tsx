@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 import Logo from '../../assets/gamaacademy-logo.svg';
 
@@ -14,9 +15,9 @@ const Home: React.FC = () => {
             Gama Bank é um projeto de nossos alunos.
             Já tem conta?
           </p>
-          <button>
+          <Link to="/signin">
             Acessar
-          </button>
+          </Link>
         </div>
         <Form>
           <p>
@@ -27,9 +28,9 @@ const Home: React.FC = () => {
           <input type="text" placeholder="Nome completo" />
           <input type="text" placeholder="Digite sua senha" />
           <input type="text" placeholder="Confirme sua senha" />
-          <button>
+          <Link to="/dashboard">
             Continuar
-          </button>
+          </Link>
         </Form>
       </Content>
     </Container>
