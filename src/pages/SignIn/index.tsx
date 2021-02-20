@@ -1,64 +1,95 @@
-import React, { FormEvent, useState} from 'react'
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState, FormEvent, useEffect } from 'react';
+import { Link, useHistory } from "react-router-dom";
 
-import Logo from '../../assets/gamaacademy-logo.svg';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
-import { Container, Content, Form } from './style';
+import api from '../../services/api'
 
-import api from '../../services/api';
+import Logo from "../../assets/gamaacademy-logo.svg";
+import { Container, Header, LoginPage, LinkSections } from "./style";
 
-interface FormData {
-  usuario: string;
-  senha: string;
+interface IToken{
+  storage: string
 }
 
 const SignIn: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
   const history = useHistory();
 
-  function handleLogin(event: FormEvent<HTMLFormElement>) {
+  const [ login, setLogin ] = useState('')
+  const [ password, setPassword ] = useState('')
+  const [ storage, setStorage ] = useState<IToken>(():any => {
+    let storageToken = () => localStorage.getItem('@tokenApp')
+    return storageToken();
+  })
+  
+  useEffect(() => {
+    !!storage ? history.push('/dashboard') : localStorage.clear()
+  }, [storage, history])
+
+  function handleLogin( event: FormEvent<HTMLFormElement>){
     event.preventDefault();
 
-    const formData: FormData = {
-      usuario: username,
-      senha: password,
+    const postData= {
+      usuario: login,
+      senha: password
     }
-    
-    api.post(`login`, formData)
-      .then(response => {
-        console.log(response.data);
-        localStorage.setItem('@tokenApp', response.data.token);
-        // history.push('/dashboard');
-      });
-  }
 
+    api.post(`login`, postData ).then(
+      response => {
+        localStorage.setItem('@tokenApp', response.data.token)
+        history.push('/dashboard')
+      }
+    )
+
+  }
   return (
     <Container>
-      <img src={Logo} alt="GamaAcademy Logo"/>
-      <Content>
-        <Form onSubmit={handleLogin}>
-          <p>Faço seu login</p>
-          <input 
-            type="text" 
-            placeholder="Digite seu usuário"
-            value={username}
-            onChange={e => {setUsername(e.target.value)}}
-          />
-          <input 
-            type="text" 
-            placeholder="Digite sua senha"
-            value={password}
-            onChange={e => {setPassword(e.target.value)}}
-          />
-          <button type="submit">Continuar</button>
-        </Form>
-        <Link to="/forgot-password">Esqueci minha senha</Link>
-        <Link to="/">Ainda não sou cliente</Link>
-      </Content>
+      <Header>
+        <Link to="/">
+          <img className="logo-gama" src={Logo} alt=""/>
+        </Link>
+      </Header>
+      <LoginPage>
+        <div className="login-div">
+          <div>
+            <h4>
+              Faça seu Login
+            </h4>
+          </div>
+            <form onSubmit={handleLogin}>
+              <input 
+                value={ login }
+                onChange={ e => setLogin(e.target.value) }
+                type="text"
+                placeholder="Seu nome de usuário"
+              />
+
+              <input
+                value={ password }
+                onChange={ e => setPassword(e.target.value) }
+                type="password"
+                placeholder="Informe sua senha"
+              />
+
+              <button type="submit" >
+                Logar <FiChevronRight size={25}/>
+              </button>
+
+            </form>
+            <LinkSections>
+              <Link to="/recoveryPass">
+                <FiChevronLeft size={20}/> Esqueci minha senha 
+              </Link>
+              <br/>
+              <Link to="/">
+                <FiChevronLeft size={20}/>  Ainda não sou cliente
+              </Link>
+            </LinkSections>
+        </div>
+      </LoginPage>
     </Container>
-  )
+  );
 }
 
 export default SignIn;

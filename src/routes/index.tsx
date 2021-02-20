@@ -12,7 +12,7 @@ import SignIn from '../pages/SignIn';
 import ForgotPassword from '../pages/ForgotPassword';
 import Dashboard from '../pages/Dashboard';
 
-import { isAuth } from '../services/isAuth';
+import { isAuthenticated } from '../services/auth';
 
 interface RouteProps extends ReactDOMRouteProps { 
   component: React.ComponentType;
@@ -22,7 +22,7 @@ const PrivateRoute: React.FC<RouteProps> = ({ component: Component, ...rest }) =
   <Route 
     {...rest} 
     render={
-      props => isAuth 
+      props => isAuthenticated() 
       ? (<Component />)
       : (<Redirect to={{pathname: '/', state: { from: props.location}}} />)
     }
